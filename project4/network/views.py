@@ -63,5 +63,9 @@ def register(request):
         return render(request, "network/register.html")
 
 def new_Post(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
+    if request.method == "POST":
+        posts = Posts()
+        posts.post = request.POST.get("posts")
+        posts.save()
+        return render(request,"network/index.html",{
+            message:"post created successfully"})

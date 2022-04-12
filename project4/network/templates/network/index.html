@@ -1,9 +1,14 @@
 {% extends "network/layout.html" %}
 {% load static %}
 {% block body %}
+    {% if message %}
+        <div class="alert alert-info" role="alert">
+            {{message}}
+        </div>
+    {% endif %}
     <div class="ml-3 border p-2">
         <h4>New Post</h4>
-        <textarea class="form-control mb-2" id="post_Content"></textarea>
+        <textarea class="form-control mb-2" id="post_Content" name="posts"></textarea>
         <button class="btn btn-primary" id="post_Btn">post</button>
     </div>
 {% endblock %}
