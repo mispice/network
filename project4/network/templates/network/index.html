@@ -1,0 +1,12 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+    <div class="ml-3 border p-2">
+        <h4>New Post</h4>
+        <textarea class="form-control mb-2" id="post_Content"></textarea>
+        <button class="btn btn-primary" id="post_Btn">post</button>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'network/posts.js' %}"></script>
+{% endblock %}
