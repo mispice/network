@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded',function(){
-    document.querySelector("#post_Btn").addEventListener('click',()=>postcontent);
+    document.querySelector('#post_Button').addEventListener('click',postcontent);
+    document.querySelector('#button').addEventListener('click',hey);
 });
 
 function postcontent(){
+    console.log("hello world");
     const content = document.querySelector("#post_Content").value;
-    fetch('/emails',{
+    fetch('/new_Post',{
         method: POST,
         body: JSON.stringify({
             post : content
@@ -14,4 +16,8 @@ function postcontent(){
     .then(response => {
         console.log(response);
     })
+}
+
+function hey(){
+    console.log("hello world");
 }

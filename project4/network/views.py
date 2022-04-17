@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -63,9 +63,14 @@ def register(request):
         return render(request, "network/register.html")
 
 def new_Post(request):
-    if request.method == "POST":
-        posts = Posts()
-        posts.post = request.POST.get("posts")
-        posts.save()
-        return render(request,"network/index.html",{
-            message:"post created successfully"})
+    if request.method != "POST":
+        return JsonResponse({"error": "Post request required"}, status=400)
+    data =  json.loads(request.body)
+    posts = data.get("post")
+    if posts == "":
+        return JsonResponse({"error: Post should include one or more characters"}, status=400)
+    post = post()
+    post.post = posts
+    post.User = request.user
+    post.save()
+    return JsonResponse({"message": "successfully posted"}, status = 201)
