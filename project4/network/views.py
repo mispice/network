@@ -74,3 +74,8 @@ def new_Post(request):
     post.User = request.user
     post.save()
     return JsonResponse({"message": "successfully posted"}, status = 201)
+
+def display(request):
+    post = Posts.objects.filter(User != request.user)
+    posts = posts.order_by("date_Posted").all()
+    return JsonResponse([post.serialize() for post in posts], safe=False)

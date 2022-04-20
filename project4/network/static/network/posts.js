@@ -1,10 +1,9 @@
-document.addEventListener('DOMContentLoaded',function(){
-    document.querySelector('#post_Button').addEventListener('click',postcontent);
-    document.querySelector('#button').addEventListener('click',hey);
+document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelector('#post_Button').addEventListener('click', postcontent);
+    document.querySelector('#all_Posts').addEventListener('click', display);
 });
 
 function postcontent(){
-    console.log("hello world");
     const content = document.querySelector("#post_Content").value;
     fetch('/new_Post',{
         method: POST,
@@ -17,7 +16,6 @@ function postcontent(){
         console.log(response);
     })
 }
-
-function hey(){
+function display (){
     console.log("hello world");
 }
