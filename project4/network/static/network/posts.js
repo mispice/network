@@ -35,10 +35,16 @@ function display(){
             date.innerHTML = posts.date_Posted;
             document.querySelector('#display_Posts').append(date);
             const like = document.createElement('div');
+            const like_Image = document.createElement('img');
+            like_Image.src = "project4\network\static\network\heart.png"
             like.innerHTML = posts.likes;
+            document.querySelector('#display_Posts').append(like_Image);
             document.querySelector('#display_Posts').append(like);
             const dislike = document.createElement('div');
+            const dislike_Image = document.createElement('img');
+            dislike_Image.src = "project4\network\static\network\dislike.png"
             dislike.innerHTML = posts.dislikes;
+            document.querySelector("#display_Posts").append(dislike_Image);
             document.querySelector('#display_Posts').append(dislike);
         })
     })

@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
+import json
 from .models import *
 
 
@@ -73,7 +73,7 @@ def new_Post(request):
     posts = data.get("post")
     if posts == "":
         return JsonResponse({"error: Post should include one or more characters"}, status=400)
-    post = post()
+    post = Posts()
     post.post = posts
     post.User = request.user
     post.save()
