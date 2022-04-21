@@ -12,6 +12,16 @@ class Posts(models.Model):
     likes = models.IntegerField(default = 0)
     dislikes = models.IntegerField(default = 0)
 
+    def serialize(self):
+        return {
+            "user":self.User.username,
+            "id": self.id,
+            "post": self.post,
+            "date_Posted": self.date_Posted.strftime("%b %d %Y, %I:%M %p"),
+            "likes": self.likes,
+            "dislikes":self.dislikes
+        }
+
 class comment(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Posts, on_delete = models.CASCADE, related_name= "comment")
