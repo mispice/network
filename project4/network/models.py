@@ -29,10 +29,18 @@ class comment(models.Model):
     date_Created = models.DateTimeField(auto_now_add = True)
 
 class followers(models.Model):
-    User = models.ForeignKey(User,on_delete=models.CASCADE, related_name="followers")
-    follower = models.IntegerField()
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="ofuser")
+    follower = models.ForeignKey(User,on_delete=models.CASCADE,related_name="follower")
     datefollowed = models.DateTimeField(auto_now_add  = True)
 class following(models.Model):
-    User = models.ForeignKey(User,on_delete=models.CASCADE, related_name="following")
-    following = models.IntegerField()
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="userfollowing")
+    following = models.ForeignKey(User,on_delete=models.CASCADE,related_name="following")
     datefollowing = models.DateTimeField(auto_now_add  = True)
+
+    def serialize(self):
+        return {
+            "user":self.user.username,
+            "id": self.id,
+            "datefollowing": self.datefollowing.strftime("%b %d %Y, %I:%M %p"),
+            "following":self.following.username
+        }

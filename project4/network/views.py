@@ -83,3 +83,10 @@ def display(request):
     post = Posts.objects.exclude(User = request.user)
     post= post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post], safe=False)
+
+def following_Posts(request):
+    followings = following.objects.filter(User = request.user)
+    for following in followings:
+        post = Posts.objects.filter(User = following.User)
+    return JsonResponse([posts.serialize() for posts in post],safe=False)
+        
