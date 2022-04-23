@@ -37,10 +37,10 @@ class following(models.Model):
     following = models.ForeignKey(User,on_delete=models.CASCADE,related_name="following")
     datefollowing = models.DateTimeField(auto_now_add  = True)
 
-    def serialize(self):
-        return {
-            "user":self.user.username,
-            "id": self.id,
-            "datefollowing": self.datefollowing.strftime("%b %d %Y, %I:%M %p"),
-            "following":self.following.username
-        }
+    # def serialize(self):
+    #     return {
+    #         "user":self.user.username,
+    #         "id": self.id,
+    #         "datefollowing": self.datefollowing.strftime("%b %d %Y, %I:%M %p"),
+    #         "following":self.following.username
+    #     }

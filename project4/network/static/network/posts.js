@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded',()=>{
     document.querySelector('#post_Button').addEventListener('click', postcontent);
-    document.querySelector('#all_Posts').addEventListener('click', display);
-    document.querySelector("#following").addEventListener('click', display_Following_Posts);
-    display();
+    document.querySelector('#all_Posts').addEventListener('click', ()=> display('display'));
+    document.querySelector("#following").addEventListener('click', ()=>display('following'));
+    display('display');
 });
 
 function postcontent(){
@@ -19,11 +19,14 @@ function postcontent(){
     })
 }
 
-function display(){
-    fetch('/display')
+function display(content){
+    fetch(`/${content}`)
     .then(response => response.json())
     .then(function(posts){
-        console.log(posts);
+        if(content == 'following'){
+            document.querySelector('#new_Post').style.display ='none';
+            document.querySelector('#display_Posts').style.display = 'none'
+        }
         posts.forEach(posts => {
             const wrapper = document.createElement('div');
             wrapper.setAttribute('id','wrapper');
@@ -35,6 +38,7 @@ function display(){
             wrapper.append(username);
             const content = document.createElement('div');
             content.innerHTML = posts.post;
+            content.style.fontSize = '25';
             wrapper.append(content);
             const date = document.createElement('div');
             date.innerHTML = posts.date_Posted;
@@ -57,7 +61,4 @@ function display(){
     return 0;
 }
 
-function display_Following_Posts(){
-    
-}
 
