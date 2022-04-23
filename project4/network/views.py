@@ -84,6 +84,7 @@ def display(request):
     post= post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post], safe=False)
 
+@login_required
 def following_Posts(request):
     followings = following.objects.filter(user = request.user)
     for follow in followings:
@@ -91,3 +92,14 @@ def following_Posts(request):
     post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post],safe=False)
         
+def profile(request,username):
+    post = Posts.objects.filter(User = username)
+    post = post.order_by('-date_Posted').all()
+    followings = following.objects.filter(user = username)
+    follower = followers.objects.filter(user = username)
+    counter_Follower = 0
+    counter_Following = 0
+    for follow in followings:
+        counter_Following+=1
+    for follow in follower:
+        counter_Follower+=1

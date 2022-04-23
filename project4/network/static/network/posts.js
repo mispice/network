@@ -25,9 +25,10 @@ function display(content){
     .then(function(posts){
         if(content == 'following'){
             document.querySelector('#new_Post').style.display ='none';
-            document.querySelector('#display_Posts').style.display = 'none'
+            document.querySelector('#display_Posts').innerHTML = '';
         }
         posts.forEach(posts => {
+            document.querySelector('#display_Posts').style.display = 'block'
             const wrapper = document.createElement('div');
             wrapper.setAttribute('id','wrapper');
             wrapper.style.border = "0.5px";
@@ -35,6 +36,10 @@ function display(content){
             const username = document.createElement('div');
             username.innerHTML = posts.user;
             username.style.fontWeight = "bold";
+            username.onclick = function(){
+                console.log(username.innerHTML);
+                fetch(`profile/${username.innerHTML}`)
+            }
             wrapper.append(username);
             const content = document.createElement('div');
             content.innerHTML = posts.post;
