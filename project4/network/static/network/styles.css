@@ -10,3 +10,19 @@
     border: 0.5px;
     border-radius: 0.3px;
 }
+#display_Profile{
+    padding: 20px;
+    border: 0.5px solid rgb(201, 199, 199);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+#display_Content{
+    text-align: center;
+    border: 0.5px solid rgb(201, 199, 199);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 30px;
+    background-color: aliceblue;
+}
