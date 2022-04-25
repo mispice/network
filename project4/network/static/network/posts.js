@@ -69,25 +69,27 @@ function display(content){
                 .then((post)=>{
                     console.log()
                     //do something 
-                    //const User = document.createElement('div');
                     const text_Follower = document.createElement('h6');
                     const text_Following = document.createElement('h6');
-                    //User.innerHTML = post.user;
-                    //document.querySelector('#display_Profile').append(User);
                     const User = document.createElement('h3');
                     User.innerHTML = user_id
                     document.querySelector('#display_Profile').append(User);
-                    const follower = document.createElement('div');
-                    follower.innerHTML = post.counter_Follower;
-                    text_Follower.innerHTML = "Followers: ";
-                    document.querySelector('#display_Profile').append(text_Follower);
-                    document.querySelector('#display_Profile').append(follower);
-                    text_Following.innerHTML = "Following: ";
-                    text_Following.style.marginLeft = "10px";
-                    const following =document.createElement('div');
-                    document.querySelector('#display_Profile').append(text_Following);
-                    following.innerHTML = post.counter_Following;
-                    document.querySelector('#display_Profile').append(following);
+                    fetch(`follower/${user_id}`)
+                    .then(response => response.json())
+                    .then(function(data){
+                        console.log(data);
+                            const follower = document.createElement('div');
+                            follower.innerHTML = data.counter_Follower;
+                            text_Follower.innerHTML = "Followers: ";
+                            document.querySelector('#display_Profile').append(text_Follower);
+                            document.querySelector('#display_Profile').append(follower);
+                            text_Following.innerHTML = "Following: ";
+                            text_Following.style.marginLeft = "10px";
+                            const following = document.createElement('div');
+                            document.querySelector('#display_Profile').append(text_Following);
+                            following.innerHTML = data.counter_Following;
+                            document.querySelector('#display_Profile').append(following);
+                    });
                     button_Container = document.createElement('div');
                     follow_Button = document.createElement('button');
                     Unfollow_Button = document.createElement('button');

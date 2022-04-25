@@ -96,6 +96,10 @@ def profile(request,user_id):
     user = User.objects.get(username = user_id)
     post = Posts.objects.filter(User = user.id)
     post = post.order_by("-date_Posted").all()
+    return JsonResponse([posts.serialize() for posts in post],safe=False)
+    
+def follower(request,user_id):
+    user = User.objects.get(username = user_id)
     followings = following.objects.filter(user = user)
     follower = following.objects.filter(following = user)
     counter_Follower = 0
@@ -104,8 +108,8 @@ def profile(request,user_id):
         counter_Following+=1
     for follow in follower:
         counter_Follower+=1
-    print(counter_Follower)
-    print(counter_Following)
-    return JsonResponse([posts.serialize() for posts in post],safe=False)
-    return JsonResponse([counter_Follower,counter_Following,user],safe = False)
-    
+    data = {
+        "counter_Follower":counter_Follower,
+        "counter_Following":counter_Following
+    }
+    return JsonResponse(data,safe=False)
