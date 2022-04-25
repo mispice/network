@@ -97,7 +97,8 @@ def profile(request,user_id):
     post = Posts.objects.filter(User = user.id)
     post = post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post],safe=False)
-    
+
+#displays the number of users a profile has
 def follower(request,user_id):
     user = User.objects.get(username = user_id)
     followings = following.objects.filter(user = user)
@@ -113,3 +114,55 @@ def follower(request,user_id):
         "counter_Following":counter_Following
     }
     return JsonResponse(data,safe=False)
+
+@csrf_exempt
+def follow(request,user_id):
+    if request.method != "POST":
+        return JsonResponse({"error": "Post request required"}, status=400)
+    data =  json.loads(request.body)
+    posts = data.get("follow")
+    followings = following.objects.all()
+    update_followings = following()
+    user_Obj = User.objects.get(username=user_id)
+    counter = 0
+    for users_followed in followings:
+        if users_followed.user == request.user and users_followed.following == user_Obj:
+            counter +=1
+    if counter == 1:
+        data = {
+            "message": "Already followed user"
+        }
+        return JsonResponse(data, safe=False)
+    else:
+            update_followings.user = request.user
+            update_followings.following = user_Obj
+            update_followings.save()
+            data = {
+                "message": "Successfully followed user"
+            }
+            return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def unfollow(request,user_id):
+    if request.method != "POST":
+        return JsonResponse({"error": "Post request required"}, status=400)
+    data =  json.loads(request.body)
+    posts = data.get("unfollow")
+    followings = following.objects.all()
+    user_Obj = User.objects.get(username=user_id)
+    counter = 0
+    for users_followed in followings:
+        if users_followed.user == request.user and users_followed.following == user_Obj:
+            counter +=1
+    if counter == 1:
+        update_followings = following.objects.filter(user=request.user,following = user_Obj)
+        update_followings.delete()
+        data = {
+            "message": "Successfully unfollowed user"
+        }
+        return JsonResponse(data, safe=False)
+    else:
+        data = {
+            "message": "You haven't followed the user yet"
+        }
+        return JsonResponse(data, safe=False)

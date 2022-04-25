@@ -23,8 +23,8 @@ function postcontent(){
         document.querySelector('#display_Message').append(message);
         document.querySelector('#display_Message').style.display = "block";
         document.querySelector('#display_Message').onclick = function(){
-            document.querySelector('#display_Message').innerHTML = "";
-            document.querySelector('#display_Message').style.display = "none";
+        document.querySelector('#display_Message').innerHTML = "";
+        document.querySelector('#display_Message').style.display = "none";
         }
     })
 }
@@ -94,6 +94,7 @@ function display(content){
                     follow_Button = document.createElement('button');
                     Unfollow_Button = document.createElement('button');
                     follow_Button.innerHTML = "Follow";
+                    follow_Button.style.marginRight = "20px";
                     follow_Button.setAttribute('class','btn btn-primary');
                     Unfollow_Button.setAttribute('class','btn btn-primary');
                     Unfollow_Button.innerHTML = "Unfollow";
@@ -104,6 +105,16 @@ function display(content){
                     button_Container.append(Unfollow_Button);
                     document.querySelector('#display_Profile').append(button_Container);
 
+                    //calls follow function
+                    follow_Button.onclick = function(){
+                        follow(user_id)
+                    }
+                    //calls unfollow function
+                    Unfollow_Button.onclick = function(){
+                        unfollow(user_id)
+                    }
+
+                    //display posts related to the clicked profile
                     post.forEach(function(post){
                         const wrapper = document.createElement('div');
                         wrapper.setAttribute('id','wrapper');
@@ -140,7 +151,7 @@ function display(content){
                         wrapper.style.marginTop= "20px";
                         document.querySelector('#display_Content').append(wrapper);
                     });
-                })
+                });
             }
             wrapper.append(username);
             const content = document.createElement('div');
@@ -176,4 +187,50 @@ function display(content){
     return 0;
 }
 
+//allows user to follow another user
+function follow(user_id){
+    fetch(`follow/${user_id}`,{
+        method: 'POST',
+        body: JSON.stringify({
+            follow : user_id
+        })
+    })
+    .then(response=>response.json())
+    .then(posts => {
+        document.querySelector('#post_Content').value = '';
+        const message = document.createElement('div');
+        message.setAttribute('class','alert alert-info');
+        message.setAttribute('role','alert');
+        message.innerHTML = posts.message;
+        document.querySelector('#display_Message').append(message);
+        document.querySelector('#display_Message').style.display = "block";
+        document.querySelector('#display_Message').onclick = function(){
+        document.querySelector('#display_Message').innerHTML = "";
+        document.querySelector('#display_Message').style.display = "none";
+        }
+    });
+}
+//allows a user to unfollow another user
+function unfollow(user_id){
+    fetch(`unfollow/${user_id}`,{
+        method: 'POST',
+        body: JSON.stringify({
+            unfollow : user_id
+        })
+    })
+    .then(response=>response.json())
+    .then(posts => {
+        document.querySelector('#post_Content').value = '';
+        const message = document.createElement('div');
+        message.setAttribute('class','alert alert-info');
+        message.setAttribute('role','alert');
+        message.innerHTML = posts.message;
+        document.querySelector('#display_Message').append(message);
+        document.querySelector('#display_Message').style.display = "block";
+        document.querySelector('#display_Message').onclick = function(){
+        document.querySelector('#display_Message').innerHTML = "";
+        document.querySelector('#display_Message').style.display = "none";
+        }
+    });
+}
 
