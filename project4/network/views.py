@@ -107,5 +107,5 @@ def profile(request,user_id):
     print(counter_Follower)
     print(counter_Following)
     return JsonResponse([posts.serialize() for posts in post],safe=False)
-    return JsonResponse(counter_Follower,counter_Following,user)
+    return JsonResponse([counter_Follower,counter_Following,user],safe = False)
     

@@ -15,7 +15,17 @@ function postcontent(){
     })
     .then(response=>response.json())
     .then(posts => {
-        console.log(posts);
+        document.querySelector('#post_Content').value = '';
+        const message = document.createElement('div');
+        message.setAttribute('class','alert alert-info');
+        message.setAttribute('role','alert');
+        message.innerHTML = "Successfully Posted";
+        document.querySelector('#display_Message').append(message);
+        document.querySelector('#display_Message').style.display = "block";
+        document.querySelector('#display_Message').onclick = function(){
+            document.querySelector('#display_Message').innerHTML = "";
+            document.querySelector('#display_Message').style.display = "none";
+        }
     })
 }
 
@@ -29,11 +39,14 @@ function display(content){
             document.querySelector('#display_Posts').innerHTML = '';
             document.querySelector('#display_Profile').style.display = 'none';
             document.querySelector('#display_Content').style.display = 'none';
+            document.querySelector('#display_Message').style.display = 'none';
         }
+        
         posts.forEach(posts => {
             document.querySelector('#display_Posts').style.display = 'block'
             document.querySelector('#display_Profile').style.display = 'none';
             document.querySelector('#display_Content').style.display = 'none';
+            document.querySelector('#display_Message').style.display = 'none';
             const wrapper = document.createElement('div');
             wrapper.setAttribute('id','wrapper');
             wrapper.style.border = "0.5px";
@@ -47,6 +60,7 @@ function display(content){
             username.onclick = function(){
                 document.querySelector('#new_Post').style.display ='none';
                 document.querySelector('#display_Posts').style.display ='none';
+                document.querySelector('#display_Message').style.display = 'none';
                 document.querySelector('#display_Profile').style.display = 'flex';
                 document.querySelector('#display_Posts').innerHTML = '';
                 document.querySelector('#display_Content').style.display = 'block';
@@ -60,9 +74,9 @@ function display(content){
                     const text_Following = document.createElement('h6');
                     //User.innerHTML = post.user;
                     //document.querySelector('#display_Profile').append(User);
-                    const mini = document.createElement('h3');
-                    mini.innerHTML = "Mini"
-                    document.querySelector('#display_Profile').append(mini);
+                    const User = document.createElement('h3');
+                    User.innerHTML = user_id
+                    document.querySelector('#display_Profile').append(User);
                     const follower = document.createElement('div');
                     follower.innerHTML = post.counter_Follower;
                     text_Follower.innerHTML = "Followers: ";
@@ -118,7 +132,8 @@ function display(content){
                         dislike.innerHTML = post.dislikes;
                         wrapper.append(dislike_Image);
                         wrapper.append(dislike);
-                        wrapper.style.border = "0.25px";
+                        wrapper.style.border = "0.25px solid rgb(201, 199, 199)";
+                        wrapper.style.borderRadius = "20px"
                         wrapper.style.padding = "10px";
                         wrapper.style.marginTop= "20px";
                         document.querySelector('#display_Content').append(wrapper);
@@ -135,16 +150,24 @@ function display(content){
             wrapper.append(date);
             const like = document.createElement('div');
             const like_Image = document.createElement('img');
-            like_Image.src = "project4\network\static\network\heart.png"
+            like_Image.src = "https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/red-heart.png";
+            like_Image.style.width = "30px";
+            like_Image.style.height = "30px";
             like.innerHTML = posts.likes;
             wrapper.append(like_Image);
             wrapper.append(like);
             const dislike = document.createElement('div');
             const dislike_Image = document.createElement('img');
-            dislike_Image.src = "project4\network\static\network\dislike.png"
+            dislike_Image.src = "https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/thumbs-down.png"
+            dislike_Image.style.width = "30px";
+            dislike_Image.style.height = "30px"
             dislike.innerHTML = posts.dislikes;
             wrapper.append(dislike_Image);
             wrapper.append(dislike);
+            wrapper.style.border = "0.25px solid rgb(201, 199, 199)";
+            wrapper.style.borderRadius = "20px"
+            wrapper.style.padding = "10px";
+            wrapper.style.marginTop= "20px";
             document.querySelector('#display_Posts').append(wrapper);
         })
     })

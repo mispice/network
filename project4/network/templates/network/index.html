@@ -1,25 +1,23 @@
 {% extends "network/layout.html" %}
 {% load static %}
 {% block body %}
-    {% if message %}
-        <div class="alert alert-info" role="alert">
-            {{message}}
-        </div>
-    {% endif %}
+    
+    <div id="display_Message"></div>
+        
+    </div>
+
     <div class="ml-3 border p-2" id="new_Post">
         <h4>New Post</h4>
         <textarea class="form-control mb-2" id="post_Content" name="posts"></textarea>
         <button class="btn btn-primary" id="post_Button">post</button>
     </div>
-    
-    <div id="display_Profile">
-    </div>
-    <div id="display_Content">
 
-    </div>
+    <div id="display_Profile"></div>
 
-    <div id="display_Posts">
-    </div>
+    <div id="display_Content"></div>
+
+    <div id="display_Posts"></div>
+
 {% endblock %}
 
 {% block script %}

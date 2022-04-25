@@ -1,10 +1,10 @@
 #display_Posts{
-    border: 1px solid rgb(221, 221, 221);
     display: flex;
     border-radius: 0.25px;
     flex-direction: column;
     padding: 10px;
     margin: 10px;
+    text-align: center;
 }
 #wrapper{
     border: 0.5px;
@@ -20,9 +20,7 @@
 }
 #display_Content{
     text-align: center;
-    border: 0.5px solid rgb(201, 199, 199);
     border-radius: 5px;
     padding: 10px;
     margin: 30px;
-    background-color: aliceblue;
 }
