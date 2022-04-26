@@ -55,6 +55,11 @@ function display(content){
             const user_id = posts.user;
             username.innerHTML = posts.user;
             username.style.fontWeight = "bold";
+            
+            const edit = document.createElement('a');
+            edit.innerHTML = "Edit Post";
+            edit.setAttribute('href','');
+            edit.setAttribute('class','link-success');
 
             //display profile of user clicked
             username.onclick = function(){
@@ -135,14 +140,18 @@ function display(content){
                         wrapper.append(date);
                         const like = document.createElement('div');
                         const like_Image = document.createElement('img');
-                        like_Image.src = "project4\network\static\network\heart.png"
+                        like_Image.src = "https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/red-heart.png"
+                        like_Image.style.width = "20px";
+                        like_Image.style.height = "20px"
                         like.innerHTML = post.likes;
                         wrapper.append(like_Image);
                         wrapper.append(like);
                         const dislike = document.createElement('div');
                         const dislike_Image = document.createElement('img');
-                        dislike_Image.src = "project4\network\static\network\dislike.png"
+                        dislike_Image.src = "https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/thumbs-down.png"
                         dislike.innerHTML = post.dislikes;
+                        dislike_Image.style.width = "20px";
+                        dislike_Image.style.height = "20px"
                         wrapper.append(dislike_Image);
                         wrapper.append(dislike);
                         wrapper.style.border = "0.25px solid rgb(201, 199, 199)";
@@ -154,6 +163,7 @@ function display(content){
                 });
             }
             wrapper.append(username);
+            wrapper.append(edit);
             const content = document.createElement('div');
             content.innerHTML = posts.post;
             content.style.fontSize = '25';
@@ -164,16 +174,16 @@ function display(content){
             const like = document.createElement('div');
             const like_Image = document.createElement('img');
             like_Image.src = "https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/red-heart.png";
-            like_Image.style.width = "30px";
-            like_Image.style.height = "30px";
+            like_Image.style.width = "20px";
+            like_Image.style.height = "20px";
             like.innerHTML = posts.likes;
             wrapper.append(like_Image);
             wrapper.append(like);
             const dislike = document.createElement('div');
             const dislike_Image = document.createElement('img');
             dislike_Image.src = "https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/thumbs-down.png"
-            dislike_Image.style.width = "30px";
-            dislike_Image.style.height = "30px"
+            dislike_Image.style.width = "20px";
+            dislike_Image.style.height = "20px"
             dislike.innerHTML = posts.dislikes;
             wrapper.append(dislike_Image);
             wrapper.append(dislike);
@@ -191,6 +201,10 @@ function display(content){
             const Dislike_Text = "Dislike";
             dislike_Image.onclick = function(){
                 like_Dislike(Dislike_Text,posts.id);
+            }
+
+            edit.onclick = function(){
+                edit_Post(posts.id)
             }
         })
     });
@@ -282,5 +296,109 @@ function like_Dislike(status,post_id){
         document.querySelector('#display_Message').innerHTML = "";
         document.querySelector('#display_Message').style.display = "none";
     }
+    }
+}
+
+function edit_Post(post_id){
+    //event.preventDefault changes The default behaviour of the input which is to refresh the page once the function has passed. Thus making it stagnant
+    event.preventDefault(); 
+
+    document.querySelector('#display_Posts').innerHTML = '';
+    document.querySelector('#display_Profile').style.display = 'none';
+    document.querySelector('#display_Content').style.display = 'none';
+    document.querySelector('#display_Message').style.display = 'none';
+    document.querySelector('#edit_Posts').style.display = 'flex';
+    document.querySelector('#new_Post').style.display = "none";
+
+    const edit_Label = document.createElement('h4');
+    const label_Div = document.createElement('div');
+    edit_Label.innerHTML = "Edit";
+    label_Div.append(edit_Label);
+    const edit_TextArea = document.createElement('textarea');
+    const textArea_Div = document.createElement('div');
+    edit_TextArea.cols = 100;
+    edit_TextArea.rows = 8;
+    edit_TextArea.style.padding = "20px";
+    edit_TextArea.setAttribute('class','form-group');
+    textArea_Div.append(edit_TextArea);
+    const edit_Button = document.createElement('button');
+    const button_Div = document.createElement('div');
+    edit_Button.setAttribute('class', 'btn btn-primary')
+    edit_Button.innerHTML = "Edit"
+    button_Div.append(edit_Button);
+    document.querySelector('#edit_Posts').append(label_Div);
+    document.querySelector('#edit_Posts').append(textArea_Div);
+    document.querySelector('#edit_Posts').append(button_Div);
+    
+    fetch(`edit/${post_id}`)
+    .then (response => response.json())
+    .then(posts =>{
+        if (posts.message){
+            const message = document.createElement('div');
+            message.setAttribute('class','alert alert-info');
+            message.setAttribute('role','alert');
+            message.innerHTML = posts.message
+            document.querySelector('#display_Message').append(message);
+            document.querySelector('#display_Message').style.display = "block";
+            document.querySelector('#display_Message').onclick = function(){
+            document.querySelector('#display_Message').innerHTML = "";
+            document.querySelector('#display_Message').style.display = "none";
+        }
+              //show error message if user tried to edit other people's posts
+            document.querySelector('#edit_Posts').innerHTML = '';
+            const error_Message = document.createElement('div');
+            message.setAttribute('class','alert alert-danger');
+            message.setAttribute('role','alert');
+            message.innerHTML = "Forbidden Task, Go back to All Posts"
+            document.querySelector('#display_Message').append(error_Message);
+            document.querySelector('#display_Message').style.display = "block";
+            document.querySelector('#display_Message').onclick = function(){
+            document.querySelector('#display_Message').innerHTML = "";
+            document.querySelector('#display_Message').style.display = "none";
+            }
+            
+        }
+        else{
+            edit_TextArea.innerHTML = posts.post;
+        }
+        
+    });
+    
+    edit_Button.onclick = function(){
+        const content = edit_TextArea.value;
+        if(content === ''){
+            const message = document.createElement('div');
+                message.setAttribute('class','alert alert-danger');
+                message.setAttribute('role','alert');
+                message.innerHTML = "Content can't be empty";
+                document.querySelector('#display_Message').append(message);
+                document.querySelector('#display_Message').style.display = "block";
+                document.querySelector('#display_Message').onclick = function(){
+                document.querySelector('#display_Message').innerHTML = "";
+                document.querySelector('#display_Message').style.display = "none";
+                }
+        }
+        else{
+            fetch(`edit/${post_id}`,{
+                method: 'POST',
+                body: JSON.stringify({
+                    post : content
+                })
+            })
+            .then(response=>response.json())
+            .then(posts => {
+                const message = document.createElement('div');
+                message.setAttribute('class','alert alert-info');
+                message.setAttribute('role','alert');
+                message.innerHTML = "Successfully Updated Post";
+                document.querySelector('#display_Message').append(message);
+                document.querySelector('#display_Message').style.display = "block";
+                document.querySelector('#display_Message').onclick = function(){
+                document.querySelector('#display_Message').innerHTML = "";
+                document.querySelector('#display_Message').style.display = "none";
+                }
+            })
+        }
+        
     }
 }

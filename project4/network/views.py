@@ -202,3 +202,26 @@ def dislike(request,post_id):
             post.dislikes += int(dislike)
             post.save()
         return JsonResponse({"message": "successfully Updated"}, status = 201)
+
+@csrf_exempt
+def edit(request,post_id):
+
+    if request.method == "POST":
+        data =  json.loads(request.body)
+        posts = data.get("post")
+        post = Posts.objects.get(id = post_id)
+        post.post = posts
+        post.save()
+        return JsonResponse({"message": "successfully posted"}, status = 201)
+
+    posts= Posts.objects.get(id = post_id)
+    if(request.user == posts.User):
+        data = {
+        "post":posts.post
+        }
+        return JsonResponse(data,safe=False)
+    else:
+        data = {
+            "message": "you can only edit your post"
+        }
+        return JsonResponse(data,safe=False)
