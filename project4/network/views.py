@@ -93,7 +93,7 @@ def following_Posts(request):
     followings = following.objects.filter(user = request.user)
     for follow in followings:
         post = (Posts.objects.filter(User = follow.following))
-    post.order_by("-date_Posted").all()
+    post = post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post],safe=False)
         
 def profile(request,user_id):
@@ -190,6 +190,7 @@ def like(request,post_id):
             post.save()
         return JsonResponse({"message": "successfully Updated"}, status = 201)
 
+@csrf_exempt
 def dislike(request,post_id):
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -198,6 +199,6 @@ def dislike(request,post_id):
         if data.get("dislike") is not None:
             post = Posts.objects.get(id = post_id)
             print(post.likes)
-            post.likes -= int(dislike)
+            post.dislikes += int(dislike)
             post.save()
         return JsonResponse({"message": "successfully Updated"}, status = 201)
