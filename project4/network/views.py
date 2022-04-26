@@ -80,7 +80,7 @@ def new_Post(request):
     return JsonResponse({"message": "successfully posted"}, status = 201)
 
 def display(request):
-    post = Posts.objects.exclude(User = request.user)
+    post = Posts.objects.all()
     post= post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post], safe=False)
 
@@ -116,14 +116,14 @@ def follower(request,user_id):
     return JsonResponse(data,safe=False)
 
 @csrf_exempt
-def follow(request,user_id):
+def follow(request,user_name):
     if request.method != "POST":
         return JsonResponse({"error": "Post request required"}, status=400)
     data =  json.loads(request.body)
     posts = data.get("follow")
     followings = following.objects.all()
     update_followings = following()
-    user_Obj = User.objects.get(username=user_id)
+    user_Obj = User.objects.get(username=user_name)
     counter = 0
     for users_followed in followings:
         if users_followed.user == request.user and users_followed.following == user_Obj:
@@ -133,7 +133,13 @@ def follow(request,user_id):
             "message": "Already followed user"
         }
         return JsonResponse(data, safe=False)
-    else:
+    print(request.user)
+    if user_Obj == request.user:
+        data= {
+            "message": "you can't follow yourself"
+        }
+        return JsonResponse(data,safe=False)
+    elif counter != 1 and user_Obj != request.user:
             update_followings.user = request.user
             update_followings.following = user_Obj
             update_followings.save()
@@ -143,13 +149,13 @@ def follow(request,user_id):
             return JsonResponse(data, safe=False)
 
 @csrf_exempt
-def unfollow(request,user_id):
+def unfollow(request,user_name):
     if request.method != "POST":
         return JsonResponse({"error": "Post request required"}, status=400)
     data =  json.loads(request.body)
     posts = data.get("unfollow")
     followings = following.objects.all()
-    user_Obj = User.objects.get(username=user_id)
+    user_Obj = User.objects.get(username=user_name)
     counter = 0
     for users_followed in followings:
         if users_followed.user == request.user and users_followed.following == user_Obj:
