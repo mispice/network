@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import *
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -82,7 +83,10 @@ def new_Post(request):
 def display(request):
     post = Posts.objects.all()
     post= post.order_by("-date_Posted").all()
-    return JsonResponse([posts.serialize() for posts in post], safe=False)
+    paginator = Paginator(post,10)
+    page = request.GET.get('page')
+    post_List = paginator.get_page(page)
+    return JsonResponse([posts.serialize() for posts in post_List], safe=False)
 
 @login_required
 def following_Posts(request):
@@ -172,3 +176,28 @@ def unfollow(request,user_name):
             "message": "You haven't followed the user yet"
         }
         return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def like(request,post_id):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        print(data)
+        like = data.get("like")
+        if data.get("like") is not None:
+            post = Posts.objects.get(id = post_id)
+            print(post.likes)
+            post.likes += int(like)
+            post.save()
+        return JsonResponse({"message": "successfully Updated"}, status = 201)
+
+def dislike(request,post_id):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        print(data)
+        dislike = data.get("dislike")
+        if data.get("dislike") is not None:
+            post = Posts.objects.get(id = post_id)
+            print(post.likes)
+            post.likes -= int(dislike)
+            post.save()
+        return JsonResponse({"message": "successfully Updated"}, status = 201)

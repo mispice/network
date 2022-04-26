@@ -182,9 +182,18 @@ function display(content){
             wrapper.style.padding = "10px";
             wrapper.style.marginTop= "20px";
             document.querySelector('#display_Posts').append(wrapper);
+            
+            const like_Text = "Like";
+            like_Image.onclick = function(){
+                like_Dislike(like_Text,posts.id);
+            }
+
+            const Dislike_Text = "Dislike";
+            dislike_Image.onclick = function(){
+                like_Dislike(Dislike_Text,posts.id);
+            }
         })
-    })
-    return 0;
+    });
 }
 
 //allows user to follow another user
@@ -210,6 +219,7 @@ function follow(user_id){
         }
     });
 }
+
 //allows a user to unfollow another user
 function unfollow(user_id){
     fetch(`unfollow/${user_id}`,{
@@ -233,4 +243,44 @@ function unfollow(user_id){
         }
     });
 }
+ //allows a user to like or dislike posts 
+function like_Dislike(status,post_id){
+    if(status === "Like"){
+        fetch(`like/${post_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                like: '1'
+            })
+            })
 
+        const message = document.createElement('div');
+        message.setAttribute('class','alert alert-info');
+        message.setAttribute('role','alert');
+        message.innerHTML = "Successfully liked";
+        document.querySelector('#display_Message').append(message);
+        document.querySelector('#display_Message').style.display = "block";
+        document.querySelector('#display_Message').onclick = function(){
+        document.querySelector('#display_Message').innerHTML = "";
+        document.querySelector('#display_Message').style.display = "none";
+    }
+}
+    else if (status === "Dislike"){
+        fetch(`dislike/${post_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                dislike: '1'
+            })
+            })
+
+        const message = document.createElement('div');
+        message.setAttribute('class','alert alert-info');
+        message.setAttribute('role','alert');
+        message.innerHTML = "Successfully disliked";
+        document.querySelector('#display_Message').append(message);
+        document.querySelector('#display_Message').style.display = "block";
+        document.querySelector('#display_Message').onclick = function(){
+        document.querySelector('#display_Message').innerHTML = "";
+        document.querySelector('#display_Message').style.display = "none";
+    }
+    }
+}
