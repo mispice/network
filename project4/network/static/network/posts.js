@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded',()=>{
+
     document.querySelector('#post_Button').addEventListener('click', postcontent);
     document.querySelector('#all_Posts').addEventListener('click', ()=> display('display'));
     document.querySelector("#following").addEventListener('click', ()=>display('following'));
@@ -257,6 +258,7 @@ function unfollow(user_id){
         }
     });
 }
+
  //allows a user to like or dislike posts 
 function like_Dislike(status,post_id){
     if(status === "Like"){
@@ -349,7 +351,7 @@ function edit_Post(post_id){
             const error_Message = document.createElement('div');
             message.setAttribute('class','alert alert-danger');
             message.setAttribute('role','alert');
-            message.innerHTML = "Forbidden Task, Go back to All Posts"
+            message.innerHTML = "Forbidden Task, You can't edit the posts of other people! Go back to all Posts"
             document.querySelector('#display_Message').append(error_Message);
             document.querySelector('#display_Message').style.display = "block";
             document.querySelector('#display_Message').onclick = function(){

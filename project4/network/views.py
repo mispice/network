@@ -95,13 +95,15 @@ def following_Posts(request):
         post = (Posts.objects.filter(User = follow.following))
     post = post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post],safe=False)
-        
+
+@login_required      
 def profile(request,user_id):
     user = User.objects.get(username = user_id)
     post = Posts.objects.filter(User = user.id)
     post = post.order_by("-date_Posted").all()
     return JsonResponse([posts.serialize() for posts in post],safe=False)
 
+@login_required
 #displays the number of users a profile has
 def follower(request,user_id):
     user = User.objects.get(username = user_id)
@@ -120,6 +122,7 @@ def follower(request,user_id):
     return JsonResponse(data,safe=False)
 
 @csrf_exempt
+@login_required
 def follow(request,user_name):
     if request.method != "POST":
         return JsonResponse({"error": "Post request required"}, status=400)
@@ -153,6 +156,7 @@ def follow(request,user_name):
             return JsonResponse(data, safe=False)
 
 @csrf_exempt
+@login_required
 def unfollow(request,user_name):
     if request.method != "POST":
         return JsonResponse({"error": "Post request required"}, status=400)
@@ -178,6 +182,7 @@ def unfollow(request,user_name):
         return JsonResponse(data, safe=False)
 
 @csrf_exempt
+@login_required
 def like(request,post_id):
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -191,6 +196,7 @@ def like(request,post_id):
         return JsonResponse({"message": "successfully Updated"}, status = 201)
 
 @csrf_exempt
+@login_required
 def dislike(request,post_id):
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -204,6 +210,7 @@ def dislike(request,post_id):
         return JsonResponse({"message": "successfully Updated"}, status = 201)
 
 @csrf_exempt
+@login_required
 def edit(request,post_id):
 
     if request.method == "POST":
